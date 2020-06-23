@@ -4,11 +4,9 @@ package ru.itis.websockets.handlers;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeFailureException;
@@ -19,7 +17,6 @@ import ru.itis.websockets.orm.User;
 import ru.itis.websockets.repositories.UsersRepository;
 
 import javax.servlet.http.Cookie;
-import java.nio.file.AccessDeniedException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -41,7 +38,6 @@ public class AuthHandshakeHandler implements HandshakeHandler {
     @Override
     public boolean doHandshake(ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> map) throws HandshakeFailureException {
         ServletServerHttpRequest request = (ServletServerHttpRequest) serverHttpRequest;
-        System.out.println(request.getURI().toString());
         Cookie cookie = WebUtils.getCookie(request.getServletRequest(), "auth");
         String URI = serverHttpRequest.getURI().toString();
         //Пропускаем сразу если это регистрация или авторизация
@@ -52,8 +48,7 @@ public class AuthHandshakeHandler implements HandshakeHandler {
         //Чекаем куку
         if (cookie != null) {
             try {
-                System.out.println("Cookie is available");
-                Claims claims;
+                 Claims claims;
                 claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(cookie.getValue()).getBody();
                 Long id = Long.parseLong(claims.get("sub", String.class));
                 Optional<User> userCandidate = usersRepository.findById(id);

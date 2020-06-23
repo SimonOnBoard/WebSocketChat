@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import org.springframework.web.socket.server.HandshakeInterceptor;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 
 @Configuration
+@EnableWebSocket
 @Import({ApplicationContextConfig.class})
 public class WebSocketConfig implements WebSocketConfigurer {
     private StartHandler startHandler;

@@ -11,7 +11,6 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import ru.itis.websockets.content.FormContentLoadable;
-import ru.itis.websockets.dto.Message;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,7 +37,9 @@ public class StartHandler extends TextWebSocketHandler implements FormContentLoa
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+        System.out.println(message);
         String messageText = (String) message.getPayload();
+        System.out.println("started");
         JsonNode jsonNode = objectMapper.readTree(messageText);
         String status = jsonNode.get("status").asText();
         Map<String, String> result = new HashMap<>();
